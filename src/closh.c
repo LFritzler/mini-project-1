@@ -41,20 +41,24 @@ int main() {
         // begin parsing code - do not modify
         printf("closh> ");
         fgets(cmd, sizeof(cmd), stdin);
-        if (cmd[0] == '\n') continue;
+      
+	if (cmd[0] == '\n') continue;
         readCmdTokens(cmd, cmdTokens);
-        do {
+       
+	 do {
             printf("  count> ");
             count = readChar() - '0';
         } while (count <= 0 || count > 9);
         
         printf("  [p]arallel or [s]equential> ");
         parallel = (readChar() == 'p') ? TRUE : FALSE;
-        do {
-            printf("  timeout> ");
-            timeout = readChar() - '0';
-        } while (timeout < 0 || timeout > 9);
-        // end parsing code
+        
+	 do {
+           printf("  timeout> ");
+           timeout = readChar() - '0';
+        } while (timeout < 0 || timeout > 9);// end of true
+       
+	    // end parsing code
         
         
         ////////////////////////////////////////////////////////
@@ -81,7 +85,8 @@ int main() {
 			
 			// Create a process to run our task
         		int taskpid = fork();
-        		if(taskpid == 0) { // If we are the child process
+        
+			if(taskpid == 0) { // If we are the child process
 				// Execute given command
         			execvp(cmdTokens[0], cmdTokens);
 				// Exit with error message if command fails
@@ -93,7 +98,8 @@ int main() {
 			
 			// Create a timer process for this command
         		int timerpid = fork();
-        		if(timerpid == 0) { // If we are the child process
+        		
+			if(timerpid == 0) { // If we are the child process
 				// Sleep this thread until we cross our timeout threshold
         			sleep(timeout);
 				// We have now timed out, so kill task process and exit
